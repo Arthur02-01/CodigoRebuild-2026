@@ -1,63 +1,89 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Traction;
+import frc.robot.subsystems.Alinhador;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.VelocidadeShooter;
+import frc.robot.commands.Alinhador.PararAlinhador;
+import frc.robot.commands.Alinhador.AlinhadorManualJoytick;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
+import frc.robot.commands.Shooter.*;
+import frc.robot.commands.Traction.AtivarTurbo;
+import frc.robot.commands.Traction.Controller;
+
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    /* ===== SUBSYSTEM ===== */
+    private final Shooter shooter = new Shooter();
+    public final Traction traction = new Traction();
+    private final Alinhador Alinhador = new Alinhador();
+    /* ===== CONTROLE ===== */
+    private final XboxController xbox1 = new XboxController(0);
+    private final XboxController xbox2 = new XboxController(1);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the trigger bindings
-    configureBindings();
-  }
+    /* ===== BOTÕES ===== */
+    private final JoystickButton btnTurbo = new JoystickButton(xbox1, 1);
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+    private final JoystickButton rb =
+            new JoystickButton(xbox2, XboxController.Button.kRightBumper.value);
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-  }
+    private final JoystickButton lb =
+            new JoystickButton(xbox2, XboxController.Button.kLeftBumper.value);
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
+    private final JoystickButton btnA =
+            new JoystickButton(xbox2, XboxController.Button.kA.value);
+
+    private final JoystickButton btnX =
+            new JoystickButton(xbox2, XboxController.Button.kX.value);
+
+    private final JoystickButton btnB =
+            new JoystickButton(xbox2, XboxController.Button.kB.value);
+
+    private final JoystickButton btnY =
+            new JoystickButton(xbox2, XboxController.Button.kY.value);
+    private final Trigger rt =
+            new Trigger(() -> xbox2.getRightTriggerAxis() > 0.2);
+        
+        
+
+    public RobotContainer() {
+        configureBindings();
+        traction.setDefaultCommand(
+        new Controller(traction, xbox1)
+    );
+    }
+
+    private void configureBindings() {
+
+        btnTurbo.onTrue(new AtivarTurbo(traction));
+        /* ===== DIREÇÃO ===== */
+        rb.onTrue(new AtivarFrenteShooter(shooter));
+        lb.onTrue(new AtivarAtrasShooter(shooter));
+
+        /* ===== PARAR ===== */
+        btnA.onTrue(new PararShooter(shooter));
+
+        /* ===== VELOCIDADES ===== */
+        btnX.onTrue(new ShooterVelocidade(shooter, VelocidadeShooter.MEDIA));
+        btnB.onTrue(new ShooterVelocidade(shooter, VelocidadeShooter.ALTA));
+        btnY.onTrue(new ShooterVelocidade(shooter, VelocidadeShooter.TURBO));
+        rt.onTrue(new PararAlinhador(Alinhador));
+
+        new Trigger(() -> Math.abs(xbox2.getLeftY()) > 0.1)
+    .whileTrue(
+        new AlinhadorManualJoytick(
+            Alinhador,
+            () -> -xbox2.getLeftY()
+        )
+    );
+
+    }
+    public Command getAutonomousCommand() {
+        return null;
+    }
 }
