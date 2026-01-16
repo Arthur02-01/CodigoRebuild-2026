@@ -24,10 +24,10 @@ public class Shooter extends SubsystemBase {
     }
 
     public enum VelocidadeShooter {
-        NORMAL(0.35),
-        MEDIA(0.62),
-        ALTA(0.69),
-        TURBO(0.80);
+        NORMAL(0.55),
+        MEDIA(1.0),
+        ALTA(1.2),
+        TURBO(1.5);
 
         public final double valor;
 
@@ -55,8 +55,8 @@ public class Shooter extends SubsystemBase {
 
     public Shooter() {
 
-        shooterArlindo = new SparkMax(Constants.Shooter.ShooterArlindo, MotorType.kBrushless);
-        shooterBoquinha = new SparkMax(Constants.Shooter.ShooterBoquinha, MotorType.kBrushless);
+        shooterArlindo = new SparkMax(Constants.Shooter.ShooterArlindo, MotorType.kBrushed);
+        shooterBoquinha = new SparkMax(Constants.Shooter.ShooterBoquinha, MotorType.kBrushed);
 
         arlindoEncoder = shooterArlindo.getEncoder();
         boquinhaEncoder = shooterBoquinha.getEncoder();
@@ -102,15 +102,29 @@ public class Shooter extends SubsystemBase {
     }
 
     private void aplicar() {
-        double sinal = switch (direcaoAtual) {
-            case FRENTE -> 1.0;
-            case TRAS -> -1.0;
-            case PARADO -> 0.0;
-        };
 
-        shooterArlindo.set(sinal * velocidadeAtual.valor);
-        shooterBoquinha.set(sinal * velocidadeAtual.valor);
+        double base = velocidadeAtual.valor;
+    
+        switch (direcaoAtual) {
+    
+            case FRENTE:
+                shooterArlindo.set(+base);
+                shooterBoquinha.set(-base); 
+                break;
+    
+            case TRAS:
+                shooterArlindo.set(+base); 
+                shooterBoquinha.set(+base);
+                break;
+    
+            case PARADO:
+            default:
+                shooterArlindo.set(0.0);
+                shooterBoquinha.set(0.0);
+                break;
+        }
     }
+    
 
     /* ========= STATUS ========= */
 

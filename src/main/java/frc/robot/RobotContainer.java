@@ -10,7 +10,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.VelocidadeShooter;
 import frc.robot.commands.Alinhador.PararAlinhador;
 import frc.robot.commands.Alinhador.AlinhadorManualJoytick;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 
 import frc.robot.commands.Shooter.*;
 import frc.robot.commands.Traction.AtivarTurbo;

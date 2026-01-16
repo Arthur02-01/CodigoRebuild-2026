@@ -115,7 +115,7 @@ public class Traction extends SubsystemBase {
     // CONTROLE DE MOVIMENTO
 
     public void arcadeMode(double drive, double turn) {
-        differentialDrive.arcadeDrive(-drive, +turn);
+        differentialDrive.arcadeDrive(drive, +turn);
     }
 
     public void stop() {
