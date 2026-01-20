@@ -88,6 +88,7 @@ private final JoystickButton btnAlinhar =
 );
 
 
+
         new Trigger(() -> Math.abs(xbox2.getLeftY()) > 0.1)
     .whileTrue(
         new AlinhadorManualJoytick(

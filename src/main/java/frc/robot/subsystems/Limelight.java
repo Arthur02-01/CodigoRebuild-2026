@@ -12,10 +12,8 @@ public class Limelight extends SubsystemBase {
         table = NetworkTableInstance.getDefault().getTable("limelight");
     }
 
-    /* ===== LEITURAS ===== */
-
     public boolean temAlvo() {
-        return table.getEntry("tv").getDouble(0) == 1;
+        return table.getEntry("tv").getDouble(0.0) > 0.5;
     }
 
     public double getTx() {
@@ -25,12 +23,6 @@ public class Limelight extends SubsystemBase {
     public double getTa() {
         return table.getEntry("ta").getDouble(0.0);
     }
-
-    public int getAprilTagID() {
-        return (int) table.getEntry("tid").getDouble(-1);
-    }
-
-    /* ===== CONTROLES ===== */
 
     public void ligarLED() {
         table.getEntry("ledMode").setNumber(3);
