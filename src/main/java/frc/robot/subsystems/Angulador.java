@@ -18,7 +18,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Alinhador extends SubsystemBase {
+public class Angulador extends SubsystemBase {
 
     private final SparkMax AlinhadorMotor;
     private final RelativeEncoder AlinhadorEncoder;
@@ -26,7 +26,8 @@ public class Alinhador extends SubsystemBase {
     private final ArmFeedforward feedforward;
 
     // Limites mecânicos (graus)
-    public static final double LIMITE_SUPERIOR = 85.0;
+    public static final double LIMITE_SUPERIOR = 25.0;
+    public static final double LIMITE_CENTRAL = 15;
     public static final double LIMITE_INFERIOR = 5.0;
     public static final double MargenErro = 2.0;
     private double anguloHold = 0.0;
@@ -34,12 +35,12 @@ public class Alinhador extends SubsystemBase {
 
 
     // Redução do sistema
-    private static final double REDUCAO = 12.0;
+    private static final double REDUCAO = 5.0;
 
     // Controle manual
     private static final double VELOCIDADE_MAX = 0.15;
 
-    public Alinhador() {
+    public Angulador() {
 
         AlinhadorMotor = new SparkMax(
             Constants.Alinhador.AlinhadorMotor,
@@ -92,7 +93,7 @@ public class Alinhador extends SubsystemBase {
     return getAngulo() <= (LIMITE_INFERIOR + MargenErro);
     }
     // Zona onde começa a desacelerar (graus)
-private static final double ZONA_DESACELERACAO = 6.0;
+private static final double ZONA_DESACELERACAO = 2.0;
 
 private double aplicarZonaDesaceleracao(double velocidade) {
 
@@ -201,7 +202,7 @@ private double aplicarZonaDesaceleracao(double velocidade) {
     
     @Override
 public void periodic() {
-    /*if (holdAtivo) {
+    if (holdAtivo) {
         moverParaAngulo(anguloHold);
     }
     SmartDashboard.putNumber(
@@ -252,7 +253,7 @@ public void periodic() {
     SmartDashboard.putNumber(
         "Alinhador/Motor Output",
         AlinhadorMotor.get()
-    );*/
+    );
 }
 
 }

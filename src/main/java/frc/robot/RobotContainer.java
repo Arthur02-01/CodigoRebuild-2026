@@ -7,19 +7,22 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.subsystems.Traction;
-import frc.robot.subsystems.Alinhador;
+import frc.robot.subsystems.Angulador;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.VelocidadeShooter;
 
 import frc.robot.commands.Limelight.AlinhadorHorizontalAprilTag;
 import frc.robot.commands.Limelight.AlinhadorVerticalAprilTag;
+import frc.robot.commands.Angulador.AngularAuto;
 
-import frc.robot.commands.Alinhador.AlinhadorManualJoytick;
-import frc.robot.commands.Alinhador.PararAlinhador;
-
+//import frc.robot.commands.Alinhador.AlinhadorManualJoytick;
+import frc.robot.commands.Angulador.PararAngulador;
+import frc.robot.commands.Angulador.MoverAngulador;
 import frc.robot.commands.Autonomo.Tracao.AndarEncoder;
 import frc.robot.commands.Autonomo.Tracao.GiroPorAngulo;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+
 
 import frc.robot.commands.Shooter.*;
 import frc.robot.commands.Traction.AtivarTurbo;
@@ -30,7 +33,7 @@ public class RobotContainer {
     /* ===== SUBSYSTEMS ===== */
     private final Shooter shooter = new Shooter();
     private final Traction traction = new Traction();
-    private final Alinhador alinhador = new Alinhador();
+    private final Angulador angulador = new Angulador();
     private final Limelight limelight = new Limelight();
 
     /* ===== CONTROLES ===== */
@@ -52,6 +55,7 @@ public class RobotContainer {
     private final JoystickButton btnA =
         new JoystickButton(xbox2, XboxController.Button.kA.value);
 
+
     private final JoystickButton btnX =
         new JoystickButton(xbox2, XboxController.Button.kX.value);
 
@@ -61,6 +65,8 @@ public class RobotContainer {
     private final JoystickButton btnY =
         new JoystickButton(xbox2, XboxController.Button.kY.value);
 
+   /*private final JoystickButton btnY = new JoystickButton(xbox2, XboxController.Button.kY.value);
+    private final JoystickButton btnB = new JoystickButton(xbox2, XboxController.Button.kB.value);*/
     private final Trigger rt =
         new Trigger(() -> xbox2.getRightTriggerAxis() > 0.2);
 
@@ -92,23 +98,47 @@ public class RobotContainer {
 
         /* ===== SHOOTER ===== */
         rb.onTrue(new AtivarFrenteShooter(shooter));
-        lb.onTrue(new AtivarAtrasShooter(shooter));
+        rt.whileTrue(new AtivarAtrasShooter(shooter));//lb trocado para testar
 
         btnA.onTrue(new PararShooter(shooter));
+
+        btnY.whileTrue(new ShooterAutoPorDistancia(shooter, limelight));
+        btnB.whileTrue(new AngularAuto(angulador, limelight));
+        
         btnX.onTrue(new ShooterVelocidade(shooter, VelocidadeShooter.MEDIA));
         btnB.onTrue(new ShooterVelocidade(shooter, VelocidadeShooter.ALTA));
         btnY.onTrue(new ShooterVelocidade(shooter, VelocidadeShooter.TURBO));
-
+    
         /* ===== ALINHADOR ===== */
-        rt.onTrue(new PararAlinhador(alinhador));
+        //rt.onTrue(new PararAngulador(angulador));
 
-        new Trigger(() -> Math.abs(xbox2.getLeftY()) > 0.1)
+new POVButton(xbox2, 0)
+    .onTrue(new MoverAngulador(
+        angulador,
+        Angulador.LIMITE_SUPERIOR
+    ));
+
+
+new POVButton(xbox2, 270)
+    .onTrue(new MoverAngulador(
+        angulador,
+        Angulador.LIMITE_CENTRAL
+    ));
+
+
+new POVButton(xbox2, 180)
+    .onTrue(new MoverAngulador(
+        angulador,
+        Angulador.LIMITE_INFERIOR
+    ));
+
+       /*  new Trigger(() -> Math.abs(xbox2.getLeftY()) > 0.1)
             .whileTrue(
                 new AlinhadorManualJoytick(
                     alinhador,
                     () -> -xbox2.getLeftY()
                 )
-            );
+            );*/
     }
 
     /* ===== AUTÔNOMO ===== */

@@ -94,6 +94,13 @@ public class Shooter extends SubsystemBase {
         aplicar();
     }
 
+    public void setVelocidadeDireta(VelocidadeShooter nova) {
+    if (velocidadeAtual != nova) {
+        velocidadeAtual = nova;
+        aplicar();
+    }
+    }
+
     public void setVelocidade(VelocidadeShooter nova) {
         velocidadeAtual = (velocidadeAtual == nova)
                 ? VelocidadeShooter.NORMAL

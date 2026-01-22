@@ -1,18 +1,18 @@
-package frc.robot.commands.Alinhador;
+/*package frc.robot.commands.Alinhador;
 
 import java.util.Set;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.Alinhador;
+import frc.robot.subsystems.Angulador;
 
 public class AlinhadorManualJoytick extends Command {
-    private final Alinhador alinhador;
+    private final Angulador alinhador;
     private final DoubleSupplier eixoJoystick;
 
     public AlinhadorManualJoytick(
-        Alinhador alinhador,
+        Angulador alinhador,
         DoubleSupplier eixoJoystick
     ) {
         this.alinhador = alinhador;
@@ -48,3 +48,4 @@ public class AlinhadorManualJoytick extends Command {
         return Set.of(alinhador);
     }
 }
+*/

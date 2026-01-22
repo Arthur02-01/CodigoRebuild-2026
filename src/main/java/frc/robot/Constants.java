@@ -1,5 +1,7 @@
 package frc.robot;
 
+import frc.robot.subsystems.IntakeFloor;
+
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
@@ -39,4 +41,8 @@ public final class Constants {
     public static class EncoderAlinhador{
       public static final int AlinhadorEncoder = 19;
     }
+
+  public static final class IntakeFloorMotor{
+    public static final int IntakeMotor = 21;
+  }
 }

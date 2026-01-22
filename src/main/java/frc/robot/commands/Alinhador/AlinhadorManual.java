@@ -1,17 +1,17 @@
-package frc.robot.commands.Alinhador;
+/*package frc.robot.commands.Alinhador;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Alinhador;
+import frc.robot.subsystems.Angulador;
 
 public class AlinhadorManual extends Command {
 
-    private final Alinhador alinhador;
+    private final Angulador alinhador;
     private final DoubleSupplier velocidade;
 
     public AlinhadorManual(
-        Alinhador alinhador,
+        Angulador alinhador,
         DoubleSupplier velocidade
     ) {
         this.alinhador = alinhador;
@@ -29,3 +29,4 @@ public class AlinhadorManual extends Command {
         alinhador.parar();
     }
 }
+    */

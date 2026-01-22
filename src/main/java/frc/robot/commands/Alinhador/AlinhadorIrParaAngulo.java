@@ -1,14 +1,14 @@
-package frc.robot.commands.Alinhador;
+/*package frc.robot.commands.Alinhador;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Alinhador;
+import frc.robot.subsystems.Angulador;
 
 public class AlinhadorIrParaAngulo extends Command {
 
-    private final Alinhador alinhador;
+    private final Angulador alinhador;
     private final double alvo;
 
-    public AlinhadorIrParaAngulo(Alinhador alinhador, double alvoGraus) {
+    public AlinhadorIrParaAngulo(Angulador alinhador, double alvoGraus) {
         this.alinhador = alinhador;
         this.alvo = alvoGraus;
         addRequirements(alinhador);
@@ -28,4 +28,4 @@ public class AlinhadorIrParaAngulo extends Command {
     public void end(boolean interrupted) {
         alinhador.parar();
     }
-}
+}*/
