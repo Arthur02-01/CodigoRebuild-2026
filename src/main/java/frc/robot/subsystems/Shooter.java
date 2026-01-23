@@ -24,10 +24,10 @@ public class Shooter extends SubsystemBase {
     }
 
     public enum VelocidadeShooter {
-        NORMAL(0.55),
-        MEDIA(0.70),
-        ALTA(0.90),
-        TURBO(1.2);
+        NORMAL(0.40),
+        MEDIA(0.60),
+        ALTA(0.80),
+        TURBO(1.0);
 
         public final double valor;
 
@@ -55,8 +55,8 @@ public class Shooter extends SubsystemBase {
 
     public Shooter() {
 
-        shooterArlindo = new SparkMax(Constants.Shooter.ShooterArlindo, MotorType.kBrushed);
-        shooterBoquinha = new SparkMax(Constants.Shooter.ShooterBoquinha, MotorType.kBrushed);
+        shooterArlindo = new SparkMax(Constants.Shooter.ShooterArlindo, MotorType.kBrushless);
+        shooterBoquinha = new SparkMax(Constants.Shooter.ShooterBoquinha, MotorType.kBrushless);
 
         arlindoEncoder = shooterArlindo.getEncoder();
         boquinhaEncoder = shooterBoquinha.getEncoder();
@@ -120,7 +120,7 @@ public class Shooter extends SubsystemBase {
                 break;
     
             case TRAS:
-                shooterArlindo.set(-base); 
+                shooterArlindo.set(+base); 
                 shooterBoquinha.set(-base);
                 break;
     
@@ -158,7 +158,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        /*SmartDashboard.putString("Shooter/Direcao", direcaoAtual.name());
+        SmartDashboard.putString("Shooter/Direcao", direcaoAtual.name());
         SmartDashboard.putString("Shooter/Velocidade", velocidadeAtual.name());
 
         SmartDashboard.putBoolean("Shooter/Ativo", direcaoAtual != DirecaoShooter.PARADO);
@@ -167,6 +167,6 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putString("Shooter/Direcao", direcaoAtual.name());
         SmartDashboard.putString("Shooter/Velocidade", velocidadeAtual.name());
         SmartDashboard.putBoolean("Shooter/Ativo", direcaoAtual != DirecaoShooter.PARADO);
-        */
+        
     }
 }

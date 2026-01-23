@@ -7,8 +7,8 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
   public static class Shooter{
-   public static final int ShooterArlindo =8;
-     public static final int ShooterBoquinha =10;
+   public static final int ShooterArlindo =10;
+     public static final int ShooterBoquinha =11;
   }
   public static class EncoderShooter{
     public static final int ArlindoEncoder = 13;
@@ -27,11 +27,11 @@ public final class Constants {
 
   // ===== ENCODERS (PORTAS DIO DO roboRIO) =====
   // Ajuste se os fios estiverem em outras portas
-  public static final int leftEncoderChannelA  = 10;
+  public static final int leftEncoderChannelA  = 32;
   public static final int rightEncoderChannelA = 4;
     }
     public static class Alinhador{
-      public static final int AlinhadorMotor =18;
+      public static final int AlinhadorMotor =9;
     }
     public static class FFAlinhador{
       public static final double kS = 0.15;
@@ -39,7 +39,7 @@ public final class Constants {
       public static final double kV = 0.0;
     }
     public static class EncoderAlinhador{
-      public static final int AlinhadorEncoder = 19;
+      public static final int AnguladorEncoder = 18;
     }
 
   public static final class IntakeFloorMotor{

@@ -15,7 +15,6 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 // Imports da WPILib
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -47,11 +46,6 @@ public class Traction extends SubsystemBase {
     // Encoders do Spark
     private RelativeEncoder leftEncoder;
     private RelativeEncoder rightEncoder;
-
-    private final StructPublisher<Pose2d> robotPosePub =
-    NetworkTableInstance.getDefault()
-        .getStructTopic("/RobotPose", Pose2d.struct)
-        .publish();
 
     // Gyro
     private final Pigeon2 pigeon = new Pigeon2(22); // id 22 can
@@ -163,12 +157,8 @@ public class Traction extends SubsystemBase {
         double rightDistance =
             (-rightEncoder.getPosition() / GEAR_RATIO) * METERS_PER_ROTATION;
 
-        // Usa o maior valor absoluto para mais estabilidade
+
         return Math.max(Math.abs(leftDistance), Math.abs(rightDistance));
     }
-    @Override
-public void periodic() {
-    robotPosePub.set(new Pose2d(3.0, 2.0, new Rotation2d()));
-}
 
 }

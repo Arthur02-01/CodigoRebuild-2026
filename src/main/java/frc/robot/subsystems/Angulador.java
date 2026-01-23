@@ -26,10 +26,10 @@ public class Angulador extends SubsystemBase {
     private final ArmFeedforward feedforward;
 
     // Limites mecânicos (graus)
-    public static final double LIMITE_SUPERIOR = 25.0;
-    public static final double LIMITE_CENTRAL = 15;
-    public static final double LIMITE_INFERIOR = 5.0;
-    public static final double MargenErro = 2.0;
+    public static final double LIMITE_SUPERIOR = 55.0;
+    public static final double LIMITE_CENTRAL = 30.0;
+    public static final double LIMITE_INFERIOR = 10.0;
+    public static final double MargenErro = 1.0;
     private double anguloHold = 0.0;
     private boolean holdAtivo = false;
 
@@ -53,10 +53,10 @@ public class Angulador extends SubsystemBase {
         SparkMaxConfig cfg = new SparkMaxConfig();
         cfg.idleMode(IdleMode.kBrake)
            .inverted(false)
-           .smartCurrentLimit(60);
+           .smartCurrentLimit(20);
 
         cfg.closedLoop
-           .p(0.3)
+           .p(0.8)
            .i(0.0)
            .d(0.0)
            .outputRange(-1.0, 1.0);
@@ -93,7 +93,7 @@ public class Angulador extends SubsystemBase {
     return getAngulo() <= (LIMITE_INFERIOR + MargenErro);
     }
     // Zona onde começa a desacelerar (graus)
-private static final double ZONA_DESACELERACAO = 2.0;
+private static final double ZONA_DESACELERACAO = 1.0;
 
 private double aplicarZonaDesaceleracao(double velocidade) {
 

@@ -12,6 +12,7 @@ public class AutoAtirar extends SequentialCommandGroup {
 
     public AutoAtirar(Shooter shooter) {
 
+        
         addCommands(
             // Garante que começa desligado 
             new PararShooter(shooter),
