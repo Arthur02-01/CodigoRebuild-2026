@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+//import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.subsystems.Traction;
@@ -18,7 +18,7 @@ import frc.robot.commands.Angulador.AngularAuto;
 
 //import frc.robot.commands.Alinhador.AlinhadorManualJoytick;
 //import frc.robot.commands.Angulador.PararAngulador;
-import frc.robot.commands.Angulador.MoverAngulador;
+//import frc.robot.commands.Angulador.MoverAngulador;
 import frc.robot.commands.Autonomo.Tracao.AndarEncoder;
 import frc.robot.commands.Autonomo.Tracao.GiroPorAngulo;
 import edu.wpi.first.wpilibj2.command.button.POVButton;

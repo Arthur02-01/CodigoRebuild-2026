@@ -19,10 +19,13 @@ public class Angulador extends SubsystemBase {
     private final SparkClosedLoopController pid;
     private final ArmFeedforward feedforward;
 
-    public static final double LIMITE_SUPERIOR = 45.0;
-    public static final double LIMITE_CENTRAL = 20.0;
-    public static final double LIMITE_INFERIOR = 5.0;
-    public static final double MargenErro = 1.0;
+    public static final double LIMITE_SUPERIOR = 55.0;
+    public static final double LIMITE_CENTRAL = 25.0;
+    public static final double LIMITE_INFERIOR = 10.0;
+    public static final double MargenErro = 2.5;
+
+    private boolean holdAtivo = false;
+    private double anguloHold = 0.0;
 
     private static final double REDUCAO = 5.0;
 
@@ -82,14 +85,14 @@ public class Angulador extends SubsystemBase {
     graus = MathUtil.clamp(graus, LIMITE_INFERIOR, LIMITE_SUPERIOR);
 
     if (jaEstaNoAlvo(graus)) {
-        perfilAtivo = false;
-        motor.set(0.0);
+        iniciarHold();
         return;
     }
 
+    desativarHold();
     goal = new TrapezoidProfile.State(graus, 0.0);
     perfilAtivo = true;
-    }
+}
 
     
     private boolean jaEstaNoAlvo(double alvo) {
@@ -100,37 +103,59 @@ public class Angulador extends SubsystemBase {
         perfilAtivo = false;
         motor.set(0.0);
     }
+    public void iniciarHold() {
+        anguloHold = getAngulo();
+        holdAtivo = true;
+        perfilAtivo = false;
+    }
+
+    public void desativarHold() {
+    holdAtivo = false;
+}
 
     @Override
-    public void periodic() {
+public void periodic() {
 
-        if (perfilAtivo) {
+    if (perfilAtivo) {
 
-            TrapezoidProfile profile =
-                new TrapezoidProfile(constraints);
+        TrapezoidProfile profile =
+            new TrapezoidProfile(constraints);
 
-            setpoint = profile.calculate(0.02,setpoint,goal
-            );
+        setpoint = profile.calculate(0.02, setpoint, goal);
 
+        double ffVolts = feedforward.calculate(
+            Math.toRadians(setpoint.position),
+            Math.toRadians(setpoint.velocity)
+        );
 
-            double ffVolts = feedforward.calculate(
-                Math.toRadians(setpoint.position),
-                Math.toRadians(setpoint.velocity)
-            );
+        pid.setSetpoint(
+            grausParaRotacao(setpoint.position),
+            SparkBase.ControlType.kPosition,
+            ClosedLoopSlot.kSlot0,
+            ffVolts
+        );
 
-            pid.setSetpoint(
-                grausParaRotacao(setpoint.position),
-                SparkBase.ControlType.kPosition,
-                ClosedLoopSlot.kSlot0,
-                ffVolts
-            );
-
-            if (Math.abs(goal.position - setpoint.position) < MargenErro &&
-                Math.abs(setpoint.velocity) < 1.0) {
-                perfilAtivo = false;
-            }
+        if (Math.abs(goal.position - setpoint.position) <= MargenErro &&
+            Math.abs(setpoint.velocity) < 1.0) {
+            iniciarHold();
         }
-
-        SmartDashboard.putNumber("Angulador/Angulo", getAngulo());
     }
+
+    if (holdAtivo) {
+
+        double ffVolts = feedforward.calculate(
+            Math.toRadians(anguloHold),
+            0.0
+        );
+
+        pid.setSetpoint(
+            grausParaRotacao(anguloHold),
+            SparkBase.ControlType.kPosition,
+            ClosedLoopSlot.kSlot0,
+            ffVolts
+        );
+    }
+
+    SmartDashboard.putNumber("Angulador/Angulo", getAngulo());
+}
 }

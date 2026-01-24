@@ -7,6 +7,7 @@ public class MoverAnguladorComhold extends Command {
 
     private final Angulador angulador;
     private final double alvo;
+    private boolean executar = true;
 
     public MoverAnguladorComhold(Angulador angulador, double alvo) {
         this.angulador = angulador;
@@ -16,17 +17,29 @@ public class MoverAnguladorComhold extends Command {
 
     @Override
     public void initialize() {
+
+        double anguloAtual = angulador.getAngulo();
+
+        if (Math.abs(anguloAtual - alvo) <= Angulador.MargenErro) {
+            executar = false;
+            return;
+        }
+
         angulador.moverParaAngulo(alvo);
     }
 
     @Override
     public boolean isFinished() {
+        if (!executar) return true;
+
         return Math.abs(angulador.getAngulo() - alvo)
                <= Angulador.MargenErro;
     }
 
     @Override
     public void end(boolean interrupted) {
-        angulador.moverParaAngulo(alvo);
+        if (executar) {
+            angulador.iniciarHold();
+        }
     }
 }
