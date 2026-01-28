@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.Alinhador;
 
 public class Angulador extends SubsystemBase {
 
@@ -23,6 +24,15 @@ public class Angulador extends SubsystemBase {
     public static final double LIMITE_CENTRAL = 25.0;
     public static final double LIMITE_INFERIOR = 10.0;
     public static final double MargenErro = 2.5;
+
+    public double POSICAO_ANTERIOR = 0.0;
+    public double TEMPO_SEM_MOVIMENTO = 0.0;
+    public boolean emFalha = false;
+
+    public static final double DT = 0.02;
+    public static final double VELOCIDADE_MIN_GRAUS = 0.01; // graus/s
+    public static final double TEMPO_MAX_TRAVADO = 0.8;     // s
+    public static final double ERRO_TOLERANCIA = 1.5;       // graus
 
     private boolean holdAtivo = false;
     private double anguloHold = 0.0;
@@ -57,7 +67,7 @@ public class Angulador extends SubsystemBase {
         cfg.closedLoop
            .p(0.8)
            .i(0.0)
-           .d(0.0);
+           .d(0.001);
 
         motor.configure(
             cfg,
@@ -99,6 +109,17 @@ public class Angulador extends SubsystemBase {
     return Math.abs(getAngulo() - alvo) <= MargenErro;
     }
 
+     private void entrarEmFalha(String motivo) {
+    emFalha = true;
+    perfilAtivo = false;
+
+    // entra em hold no ângulo atual
+    anguloHold = getAngulo();
+    holdAtivo = true;
+
+    SmartDashboard.putString("Angulador/Falha", motivo);
+}
+
     public void parar() {
         perfilAtivo = false;
         motor.set(0.0);
@@ -115,6 +136,37 @@ public class Angulador extends SubsystemBase {
 
     @Override
 public void periodic() {
+
+    
+    double anguloAtual = getAngulo();
+    double velocidadeGraus = (anguloAtual - POSICAO_ANTERIOR) / DT;
+
+    double erro = Math.abs(goal.position - anguloAtual);
+    boolean tentandoMover = erro > ERRO_TOLERANCIA;
+
+        if (tentandoMover) {
+            if (Math.abs(velocidadeGraus) < VELOCIDADE_MIN_GRAUS) {
+                TEMPO_SEM_MOVIMENTO += DT;
+            } else {
+                TEMPO_SEM_MOVIMENTO = 0.0;
+            }
+        } else {
+            TEMPO_SEM_MOVIMENTO = 0.0;
+        }
+
+        POSICAO_ANTERIOR = anguloAtual;
+
+        boolean quaseNoAlvo = erro < 3.0; // graus
+
+        if (TEMPO_SEM_MOVIMENTO >= TEMPO_MAX_TRAVADO) {
+            if (quaseNoAlvo) {
+                iniciarHold(); // finaliza mesmo assim
+            } else {
+                entrarEmFalha("Angulador travado");
+            }
+        }
+
+        
 
     if (perfilAtivo) {
 

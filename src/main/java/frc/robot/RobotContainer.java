@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.subsystems.Traction;
 import frc.robot.subsystems.Angulador;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.VelocidadeShooter;
@@ -22,6 +23,7 @@ import frc.robot.commands.Autonomo.LimelightAuto.AlinhadorVerticalAuto;
 //import frc.robot.commands.Angulador.MoverAngulador;
 import frc.robot.commands.Autonomo.Tracao.AndarEncoder;
 import frc.robot.commands.Autonomo.Tracao.GiroPorAngulo;
+import frc.robot.commands.Climber.ClimberMovendo;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.Angulador.MoverAnguladorComhold;
 
@@ -37,6 +39,7 @@ public class RobotContainer {
     private final Traction traction = new Traction();
     private final Angulador angulador = new Angulador();
     private final Limelight limelight = new Limelight();
+    private final Climber climber = new Climber(); 
 
     /* ===== CONTROLES ===== */
     private final XboxController xbox1 = new XboxController(0);
@@ -109,6 +112,10 @@ public class RobotContainer {
         btnX.onTrue(new ShooterVelocidade(shooter, VelocidadeShooter.MEDIA));
         btnB.onTrue(new ShooterVelocidade(shooter, VelocidadeShooter.ALTA));
         btnY.onTrue(new ShooterVelocidade(shooter, VelocidadeShooter.TURBO));
+
+        climber.setDefaultCommand(
+            new ClimberMovendo(climber ,() -> -xbox1.getLeftY())
+        );
     
         /* ===== ALINHADOR ===== */
         //rt.onTrue(new PararAngulador(angulador));

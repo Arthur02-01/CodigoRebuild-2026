@@ -45,4 +45,12 @@ public final class Constants {
   public static final class IntakeFloorMotor{
     public static final int IntakeMotor = 21;
   }
+
+  public static final class ClimberConstants{
+    public static final int ClimberMotor = 23;
+    public static final int ClimberMotor2 = 24;
+    public static final double kS = 0.15;
+    public static final double kG = 0.45;
+    public static final double kV = 0.0;
+  }
 }
