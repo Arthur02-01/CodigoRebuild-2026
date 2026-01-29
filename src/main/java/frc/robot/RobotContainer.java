@@ -21,7 +21,7 @@ import frc.robot.commands.Autonomo.LimelightAuto.AlinhadorVerticalAuto;
 //import frc.robot.commands.Alinhador.AlinhadorManualJoytick;
 //import frc.robot.commands.Angulador.PararAngulador;
 //import frc.robot.commands.Angulador.MoverAngulador;
-import frc.robot.commands.Autonomo.Tracao.AndarEncoder;
+//import frc.robot.commands.Autonomo.Tracao.AndarEncoder;
 import frc.robot.commands.Autonomo.Tracao.GiroPorAngulo;
 import frc.robot.commands.Climber.ClimberMovendo;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
